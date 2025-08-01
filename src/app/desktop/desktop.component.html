@@ -1,0 +1,18 @@
+@if(viewModel | async; as vm) {
+<div class="cards">
+    @for(card of vm.data; track card.symbol){
+    <app-stock-card [bgColor]="getCardColor(card.status)">
+        <ng-template #content>
+            <div class="card-content">
+                @for(entrie of objectEntriesWithoutStatus(card); track $index) {
+                <p>{{entrie[0] + ': ' + (entrie[1] || '-')}}</p>
+                }
+            </div>
+        </ng-template>
+        <ng-template #toggle>
+            <app-toggle (toggleChange)="onClickToggle($event,card)" />
+        </ng-template>
+    </app-stock-card>
+    }
+</div>
+}

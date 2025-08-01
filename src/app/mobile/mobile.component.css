@@ -1,0 +1,18 @@
+.cards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.card-content-item {
+    color: blue;
+    font-size: clamp(1rem, 2vw, 2rem);
+}

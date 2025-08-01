@@ -1,0 +1,12 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 14rem;
+    padding: 1rem;
+}
+
+.toggle {
+    padding-top: 15px;
+}

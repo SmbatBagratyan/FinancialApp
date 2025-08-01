@@ -1,0 +1,6 @@
+<div class="card" [ngStyle]="{'background-color': bgColor()}">
+    <ng-container [ngTemplateOutlet]="content"></ng-container>
+    <div class="toggle">
+        <ng-container [ngTemplateOutlet]="toggle"></ng-container>
+    </div>
+</div>
