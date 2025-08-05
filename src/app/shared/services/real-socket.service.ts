@@ -34,7 +34,7 @@ export class RealSocketService {
   private handleMessage(event: MessageEvent): void {
     const data = JSON.parse(event.data);
     if (!Array.isArray(data?.data)) {
-      console.warn('Ignored non-trade message:', data);
+      console.warn('Ignored:', data);
       return;
     }
     const transformedData: IStockResponce[] = data.data.map((trade: any) => {

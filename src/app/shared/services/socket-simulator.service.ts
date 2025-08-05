@@ -29,7 +29,7 @@ export class SocketSimulatorService {
       }));
 
       this.setSimulatedStockData = this.currentData;
-    }, 16000)
+    }, 5000)
 
   }
 
@@ -59,5 +59,6 @@ export class SocketSimulatorService {
 
   public disconnect(): void {
     clearInterval(this.simulationSub);
+    this.simulationSub = null;
   }
 }

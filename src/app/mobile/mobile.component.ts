@@ -38,13 +38,9 @@ export class MobileComponent implements OnDestroy {
 
   onClickToggle(data: boolean, card: IStockResponce) {
     if (data) {
-      // should be moved to service
-      card.status = CardStatusEnum.ON;
-
-      this.stockDataService.subscribeToSymbol(card.symbol);
+      this.stockDataService.subscribeToSymbol(card);
     } else {
-      card.status = CardStatusEnum.OFF;
-      this.stockDataService.unsubscribeFromSymbol(card.symbol)
+      this.stockDataService.unsubscribeFromSymbol(card)
     }
   }
 

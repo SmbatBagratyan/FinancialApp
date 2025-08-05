@@ -31,10 +31,8 @@ export class StockDataService {
       for (const trade of data) {
         const symbol = trade.symbol;
 
-        if (this.expectedSymbols.has(symbol) && !this.receivedSymbols.has(symbol)) {
-          this.symbolResponses[symbol] = { ...trade };
-          this.receivedSymbols.add(symbol);
-        }
+        this.symbolResponses[symbol] = { ...trade };
+        this.receivedSymbols.add(symbol);
       }
 
       this.emitCollectedResponses();
@@ -43,10 +41,7 @@ export class StockDataService {
     });
 
     this.simulationSub = this.socketSimulatorService.getSimulatedStockData.subscribe(data => {
-      const currentArray: IStockResponce[] = data;
-      const previousArray = Array.from(this.initialStockData.values());
-
-      this.setStockData = this.getUpdatedCards(previousArray, currentArray);
+      this.updateStockData(data)
     });
   }
 
@@ -63,35 +58,31 @@ export class StockDataService {
     symbols.forEach(symbol => this.realSocketService.subscribeToSymbol(symbol));
   }
 
-  public subscribeToSymbol(symbol: string) {
-    this.realSocketService.subscribeToSymbol(symbol);
-    this.socketSimulatorService.subscribeToSymbol(symbol);
+  public subscribeToSymbol(card: IStockResponce) {
+    this.realSocketService.subscribeToSymbol(card.symbol);
+    this.socketSimulatorService.subscribeToSymbol(card.symbol);
+    card.status = CardStatusEnum.ON;
   }
 
-  public unsubscribeFromSymbol(symbol: string) {
-    this.realSocketService.unsubscribeFromSymbol(symbol);
-    this.socketSimulatorService.unsubscribeFromSymbol(symbol);
+  public unsubscribeFromSymbol(card: IStockResponce) {
+    this.realSocketService.unsubscribeFromSymbol(card.symbol);
+    this.socketSimulatorService.unsubscribeFromSymbol(card.symbol);
+    card.status = CardStatusEnum.OFF;
+  }
+
+  private updateStockData(data: IStockResponce[]) {
+    const currentArray: IStockResponce[] = data;
+    const previousArray = Array.from(this.initialStockData.values());
+
+    this.setStockData = this.getUpdatedCards(previousArray, currentArray);
   }
 
   private startSimulation(initialData: IStockResponce[]): void {
     this.socketSimulatorService.start(initialData);
   }
 
-  // private emitCollectedResponses(): void {
-  //   const responsesArray: IStockResponce[] = Object.values(this.symbolResponses);
-
-  //   responsesArray.forEach((card) => {
-  //     this.initialStockData.set(card.symbol, card);
-  //   });
-
-  //   this.setStockData = Array.from(this.initialStockData.values());
-  // }
-
   private emitCollectedResponses(): void {
-    const currentArray: IStockResponce[] = Object.values(this.symbolResponses);
-    const previousArray = Array.from(this.initialStockData.values());
-
-    this.setStockData = this.getUpdatedCards(previousArray, currentArray);
+    this.updateStockData(Object.values(this.symbolResponses))
   }
 
   private getUpdatedCards(

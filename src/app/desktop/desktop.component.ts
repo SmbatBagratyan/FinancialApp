@@ -30,10 +30,6 @@ export class DesktopComponent implements OnDestroy {
   constructor(private stockDataService: StockDataService) {
     this.stockDataService.connectToMultipleSymbols(this.stocks);
     this.initViewModel();
-
-    // setTimeout(() => {
-    //   this.stockDataService.disconnect()
-    // }, 5000)
   }
 
   initViewModel() {
@@ -48,13 +44,10 @@ export class DesktopComponent implements OnDestroy {
 
   onClickToggle(data: boolean, card: IStockResponce) {
     if (data) {
-      // should be moved to service
-      card.status = CardStatusEnum.ON;
-
-      this.stockDataService.subscribeToSymbol(card.symbol);
+      this.stockDataService.subscribeToSymbol(card);
     } else {
       card.status = CardStatusEnum.OFF;
-      this.stockDataService.unsubscribeFromSymbol(card.symbol)
+      this.stockDataService.unsubscribeFromSymbol(card)
     }
   }
 
